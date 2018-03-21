@@ -8,11 +8,11 @@ ms.date: 02/08/2018
 ms.topic: quickstart
 ms.devlang: go
 manager: routlaw
-ms.openlocfilehash: e530d944deca40e9e6c29b6c2768e2367822714e
-ms.sourcegitcommit: aaa8c37880332625f858a38f5918e6cf581bf48d
+ms.openlocfilehash: ae460dbf21b13c40f3d564274f8b790afe005aae
+ms.sourcegitcommit: af3473779cd7c2978f290fbdc51ee15eb1130840
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 02/15/2018
+ms.lasthandoff: 03/15/2018
 ---
 # <a name="quickstart-deploy-an-azure-virtual-machine-from-a-template-with-the-azure-sdk-for-go"></a>Szybki start: wdrażanie maszyny wirtualnej platformy Azure za pomocą szablonu i zestawu Azure SDK dla języka Go
 
@@ -32,7 +32,7 @@ W przypadku instalacji lokalnej interfejsu wiersza polecenia platformy Azure ten
 
 ## <a name="create-a-service-principal"></a>Tworzenie nazwy głównej usługi
 
-Aby można było zalogować się w aplikacji w sposób nieinterakcyjny, potrzebna jest jednostka usługi. Jednostki usługi stanowią część uwierzytelniania opartego na rolach tworzącego unikatową tożsamość użytkownika. Aby utworzyć nową jednostkę usługi za pomocą interfejsu wiersza polecenia, uruchom następujące polecenie:
+Aby można było zalogować się w aplikacji w sposób nieinterakcyjny, potrzebna jest jednostka usługi. Jednostki usługi stanowią część kontroli dostępu na podstawie ról (RBAC) tworzącej unikatową tożsamość użytkownika. Aby utworzyć nową jednostkę usługi za pomocą interfejsu wiersza polecenia, uruchom następujące polecenie:
 
 ```azurecli-interactive
 az ad sp create-for-rbac --name az-go-vm-quickstart
@@ -79,7 +79,7 @@ Należy również poddać edycji wartość w pliku `vm-quickstart-params.json`.
     }
 ```
 
-* `vm_password`: hasło konta użytkownika na maszynie wirtualnej. Hasło musi zawierać od 6 do 72 znaków i zawierać 3 spośród następujących znaków:
+* `vm_password`: hasło konta użytkownika na maszynie wirtualnej. Hasło musi zawierać od 12 do 72 znaków i 3 spośród następujących typów znaków:
   * Mała litera
   * Wielka litera
   * Cyfra
