@@ -3,17 +3,17 @@ title: Instalowanie zestawu Azure SDK dla języka Go
 description: Jak zainstalować i skonfigurować zestaw Azure SDK dla języka Go oraz zapewnić w nim zasoby.
 author: sptramer
 ms.author: sttramer
-ms.date: 01/30/2018
+ms.date: 03/14/2018
 ms.topic: article
 ms.devlang: go
 manager: carmonm
-ms.openlocfilehash: 580daf4f2e91eabf97e3acd21bda183c559b57da
-ms.sourcegitcommit: fcc1786d59d2e32c97a9a8e0748e06f564a961bd
+ms.openlocfilehash: a6a92e080aea1a92f47a9d7083f133ca05a47541
+ms.sourcegitcommit: 26520a8c6e812facb5b9432d68c370fa23c99888
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 04/16/2018
 ---
-# <a name="installing-the-azure-sdk-for-go"></a>Instalowanie zestawu Azure SDK dla języka Go
+# <a name="install-the-azure-sdk-for-go"></a>Instalowanie zestawu Azure SDK dla języka Go
 
 Zestaw Azure SDK dla języka Go — Zapraszamy! Zestaw SDK umożliwia zarządzanie usługami platformy Azure z poziomu aplikacji w języku Go, a także interakcje z tymi usługami.
 
@@ -27,7 +27,7 @@ Praca z rozszerzeniami Azure Storage Blob wymaga oddzielnego zestawu SDK.
 go get -u -d github.com/Azure/azure-storage-blob-go/...
 ```
 
-## <a name="vendoring-the-azure-sdk-for-go"></a>Zapewnianie zasobów w zestawie Azure SDK dla języka Go
+## <a name="vendor-the-azure-sdk-for-go"></a>Zapewnianie zasobów zestawu Azure SDK dla języka Go
 
 Zestaw Azure SDK dla języka Go umożliwia zapewnianie zasobów za pośrednictwem narzędzia [dep](https://github.com/golang/dep). Ze względu na stabilność zapewnianie zasobów jest zalecane. Aby można było korzystać z narzędzia `dep`, dodaj ciąg `github.com/Azure/azure-sdk-for-go` do sekcji `[[constraint]]` w pliku `Gopkg.toml`. Aby na przykład zapewnić zasoby z wersji `14.0.0`, dodaj następujący wpis:
 
@@ -37,7 +37,7 @@ name = "github.com/Azure/azure-sdk-for-go"
 version = "14.0.0"
 ```
 
-## <a name="including-the-azure-sdk-for-go-in-your-project"></a>Uwzględnianie w projekcie zestawu Azure SDK dla języka Go
+## <a name="include-the-azure-sdk-for-go-in-your-project"></a>Uwzględnianie w projekcie zestawu Azure SDK dla języka Go
 
 Aby zapewnić możliwość korzystania z usług platformy Azure z poziomu kodu Go, zaimportuj wszystkie usługi, z którymi wchodzisz w interakcje, a także wymagane moduły `autorest`.
 Pełną listę dostępnych modułów można uzyskać w dokumentacji GoDoc dotyczącej [dostępnych usług](https://godoc.org/github.com/Azure/azure-sdk-for-go) i [pakietów AutoRest](https://godoc.org/github.com/Azure/go-autorest). Najpopularniejsze pakiety z elementu `go-autorest`, których potrzebujesz, to:
