@@ -12,12 +12,12 @@ ms.technology: azure-sdk-go
 ms.devlang: go
 ms.service: active-directory
 ms.component: authentication
-ms.openlocfilehash: 370f5607b89c0044022f7987d06c3a55c9d6f352
-ms.sourcegitcommit: f08abf902b48f8173aa6e261084ff2cfc9043305
+ms.openlocfilehash: c7970167070bdf1f3fc75692f3e34268801c65df
+ms.sourcegitcommit: 181d4e0b164cf39b3feac346f559596bd19c94db
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 05/03/2018
-ms.locfileid: "32319887"
+ms.lasthandoff: 07/11/2018
+ms.locfileid: "38067003"
 ---
 # <a name="authentication-methods-in-the-azure-sdk-for-go"></a>Metody uwierzytelniania w zestawie Azure SDK dla języka Go
 
@@ -29,9 +29,9 @@ Zestaw Azure SDK dla języka Go oferuje kilka różnych typów uwierzytelniania 
 
 | Typ uwierzytelniania | Zalecane, gdy... |
 |---------------------|---------------------|
-| Uwierzytelnianie oparte na certyfikatach | Masz certyfikat X509 skonfigurowany dla jednostki lub użytkownika usługi Azure Active Directory (AAD). Aby dowiedzieć się więcej, zobacz [Get started with certificate-based authentication in Azure Active Directory (Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory)]. |
-| Poświadczenia klienta | Masz skonfigurowaną jednostkę usługi dla tej aplikacji lub klasy aplikacji, do której ona należy. Aby dowiedzieć się więcej, zobacz [Create a service principal with Azure CLI 2.0 (Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure w wersji 2.0)]. |
-| Tożsamość usługi zarządzanej (MSI, Managed Service Identity) | Aplikacja działa w obrębie zasobu platformy Azure, który został skonfigurowany przy użyciu tożsamości usługi zarządzanej (MSI). Aby dowiedzieć się więcej, zobacz [Managed Service Identity (MSI) for Azure resources (Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure)]. |
+| Uwierzytelnianie oparte na certyfikatach | Masz certyfikat X509 skonfigurowany dla jednostki lub użytkownika usługi Azure Active Directory (AAD). Aby dowiedzieć się więcej, zobacz [Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory]. |
+| Poświadczenia klienta | Masz skonfigurowaną jednostkę usługi dla tej aplikacji lub klasy aplikacji, do której ona należy. Aby dowiedzieć się więcej, zobacz [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure 2.0]. |
+| Tożsamość usługi zarządzanej (MSI, Managed Service Identity) | Aplikacja działa w obrębie zasobu platformy Azure, który został skonfigurowany przy użyciu tożsamości usługi zarządzanej (MSI). Aby dowiedzieć się więcej, zobacz [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]. |
 | Token urządzenia | Aplikacja jest przeznaczona __tylko__ do użycia w trybie interaktywnym i ma różnych użytkowników potencjalnie z wielu dzierżaw usługi AAD. Użytkownicy mogą logować się za pomocą przeglądarki internetowej. Aby uzyskać więcej informacji, zobacz [Używanie tokenu urządzenia](#use-device-token-authentication).|
 | Nazwa użytkownika/hasło | Masz interaktywną aplikację, która nie może używać innej metody uwierzytelniania. Użytkownicy nie mają włączonego uwierzytelniania wieloskładnikowego na potrzeby logowania do usługi AAD. |
 
@@ -41,9 +41,9 @@ Zestaw Azure SDK dla języka Go oferuje kilka różnych typów uwierzytelniania 
 > [!NOTE]
 > Jeśli nie masz specjalnych wymagań, unikaj uwierzytelniania nazwy użytkownika/hasła. W sytuacjach, w których logowanie oparte na użytkowniku jest właściwym rozwiązaniem, przeważnie można w zamian użyć uwierzytelniania tokenu urządzenia.
 
-[Get started with certificate-based authentication in Azure Active Directory (Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory)]: /azure/active-directory/active-directory-certificate-based-authentication-get-started
-[Create a service principal with Azure CLI 2.0 (Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure w wersji 2.0)]: /cli/azure/create-an-azure-service-principal-azure-cli
-[Managed Service Identity (MSI) for Azure resources (Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure)]: /azure/active-directory/managed-service-identity/overview
+[Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory]: /azure/active-directory/active-directory-certificate-based-authentication-get-started
+[Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure 2.0]: /cli/azure/create-an-azure-service-principal-azure-cli
+[Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]: /azure/active-directory/managed-service-identity/overview
 
 Te typy uwierzytelniania są dostępne za pośrednictwem różnych metod. [_Uwierzytelnianie oparte na środowisku_](#use-environment-based-authentication) polega na odczytywaniu poświadczeń bezpośrednio ze środowiska programu. [_Uwierzytelnianie na podstawie pliku_](#use-file-based-authentication) polega na załadowaniu pliku zawierającego poświadczenia jednostki usługi. [_Uwierzytelnianie oparte na kliencie_](#use-an-authentication-client) polega na użyciu obiektu w kodzie języka Go i wyznaczenie użytkownika jako osoby odpowiedzialnej za podawanie poświadczeń podczas wykonywania programu. Ponadto [_uwierzytelnianie tokenu urządzenia_](#use-device-token-authentication) wymaga od użytkowników interaktywnego logowania za pośrednictwem przeglądarki internetowej przy użyciu tokenu i nie może być używane z uwierzytelnianiem w oparciu o środowisko lub plik.
 
@@ -71,9 +71,9 @@ W poniższej tabeli przedstawiono zmienne środowiskowe, które należy ustawić
 | | `AZURE_CERTIFICATE_PASSWORD` | Hasło certyfikatu klienta. |
 | __Nazwa użytkownika/hasło__ | `AZURE_TENANT_ID` | Identyfikator dzierżawy usługi Active Directory, do której należy użytkownik. |
 | | `AZURE_CLIENT_ID` | Identyfikator klienta aplikacji. |
-| | `AZURE_USERNAME` | Nazwa użytkownika służąca do logowania. |
-| | `AZURE_PASSWORD` | Hasło służące do logowania. |
-| __MSI__ | | Usługa MSI nie wymaga ustawienia żadnych poświadczeń. Aplikacja musi działać w obrębie zasobu platformy Azure skonfigurowanego do użycia usługi MSI. Aby uzyskać szczegółowe informacje, zobacz [Managed Service Identity (MSI) for Azure resources (Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure)]. |
+| | `AZURE_USERNAME` | Nazwa użytkownika na potrzeby logowania się. |
+| | `AZURE_PASSWORD` | Hasło na potrzeby logowania się. |
+| __MSI__ | | Usługa MSI nie wymaga ustawienia żadnych poświadczeń. Aplikacja musi działać w obrębie zasobu platformy Azure skonfigurowanego do użycia usługi MSI. Aby uzyskać szczegółowe informacje, zobacz [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]. |
 
 Jeśli musisz nawiązać połączenie z punktem końcowym chmury lub zarządzania innym niż domyślna chmura platformy Azure, możesz również ustawić poniższe zmienne środowiskowe. Najbardziej typowe przyczyny ich ustawiania to korzystanie z usługi Azure Stack, chmury w innym regionie geograficznym lub klasycznego modelu wdrożenia platformy Azure.
 
@@ -107,7 +107,7 @@ Adres `ResourceManagerURL` różni się w zależności od nazwy regionu, nazwy m
 | Zestaw deweloperski | `https://management.local.azurestack.external/` |
 | Zintegrowane systemy | `https://management.(region).ext-(machine-name).(FQDN)` |
 
-Aby uzyskać więcej informacji na temat korzystania z zestawu Azure SDK dla języka Go w usłudze Azure Stack, zobacz [Korzystanie z profili wersji interfejsu API za pomocą języka Go w usłudze Azure Stack](https://docs.microsoft.com/en-us/azure/azure-stack/user/azure-stack-version-profiles-go)
+Aby uzyskać więcej informacji na temat korzystania z zestawu Azure SDK dla języka Go w usłudze Azure Stack, zobacz [Korzystanie z profili wersji interfejsu API za pomocą języka Go w usłudze Azure Stack](https://docs.microsoft.com/azure/azure-stack/user/azure-stack-version-profiles-go)
 
 
 ## <a name="use-file-based-authentication"></a>Używanie uwierzytelniania opartego na pliku
@@ -127,11 +127,11 @@ import "github.com/Azure/go-autorest/autorest/azure/auth"
 authorizer, err := NewAuthorizerFromFile(azure.PublicCloud.ResourceManagerEndpoint)
 ```
 
-Aby uzyskać więcej informacji na temat używania jednostek usług i zarządzania ich uprawnieniami dostępu, zobacz [Create a service principal with Azure CLI 2.0 (Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure w wersji 2.0)].
+Aby uzyskać więcej informacji na temat używania jednostek usług i zarządzania ich uprawnieniami dostępu, zobacz [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure 2.0].
 
 ## <a name="use-device-token-authentication"></a>Używanie uwierzytelniania tokenu urządzenia
 
-Jeśli chcesz, aby użytkownicy logowali się interaktywnie, najlepszym sposobem zaoferowania tej możliwości jest uwierzytelnianie tokenu urządzenia. Ten przebieg uwierzytelniania przekazuje użytkownikowi token do wklejenia w witrynie logowania firmy Microsoft. Następnie użytkownik może się w niej zalogować za pomocą konta usługi Azure Active Directory (AAD). Ta metoda uwierzytelniania obsługuje konta z włączonym uwierzytelnianiem wieloskładnikowym,w przeciwieństwie do standardowego uwierzytelniania za pomocą nazwy użytkownika/hasła.
+Jeśli chcesz, aby użytkownicy logowali się interaktywnie, najlepszym sposobem zaoferowania tej możliwości jest uwierzytelnianie tokenu urządzenia. Ten przebieg uwierzytelniania przekazuje użytkownikowi token do wklejenia w witrynie logowania firmy Microsoft. Następnie użytkownik może się w niej uwierzytelnić za pomocą konta usługi Azure Active Directory (AAD). Ta metoda uwierzytelniania obsługuje konta z włączonym uwierzytelnianiem wieloskładnikowym,w przeciwieństwie do standardowego uwierzytelniania za pomocą nazwy użytkownika/hasła.
 
 Aby użyć uwierzytelniania tokenu urządzenia, należy utworzyć autoryzator [DeviceFlowConfig](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#DeviceFlowConfig) przy użyciu funkcji [NewDeviceFlowConfig](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#NewDeviceFlowConfig). Wywołaj element [Authorizer](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#DeviceFlowConfig.Authorizer) w obiekcie wynikowym, aby rozpocząć proces uwierzytelniania. Uwierzytelnianie przepływu urządzenia blokuje wykonywanie programu do momentu ukończenia całego przepływu uwierzytelniania.
 
