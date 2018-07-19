@@ -1,21 +1,21 @@
 ---
 title: Wdrażanie maszyny wirtualnej platformy Azure z poziomu kodu Go
-description: Dowiedz się, jak wdrożyć maszynę wirtualną za pomocą zestawu Azure SDK dla języka Go.
+description: Wdróż maszynę wirtualną za pomocą zestawu Azure SDK dla języka Go.
 author: sptramer
 ms.author: sttramer
 manager: carmonm
-ms.date: 04/03/2018
+ms.date: 07/13/2018
 ms.topic: quickstart
 ms.prod: azure
 ms.technology: azure-sdk-go
 ms.service: virtual-machines
 ms.devlang: go
-ms.openlocfilehash: 7592e8617436a76dd27cac5269971051982425bf
-ms.sourcegitcommit: 181d4e0b164cf39b3feac346f559596bd19c94db
+ms.openlocfilehash: 6b1de35748fb7694d45715fa7f028d5730530d2e
+ms.sourcegitcommit: d1790b317a8fcb4d672c654dac2a925a976589d4
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 07/11/2018
-ms.locfileid: "38067020"
+ms.lasthandoff: 07/14/2018
+ms.locfileid: "39039560"
 ---
 # <a name="quickstart-deploy-an-azure-virtual-machine-from-a-template-with-the-azure-sdk-for-go"></a>Szybki start: wdrażanie maszyny wirtualnej platformy Azure za pomocą szablonu i zestawu Azure SDK dla języka Go
 
@@ -27,9 +27,9 @@ Na końcu tego przewodnika znajdują się dane działającej maszyny wirtualnej,
 
 [!INCLUDE [cloud-shell-try-it.md](includes/cloud-shell-try-it.md)]
 
-W przypadku instalacji lokalnej interfejsu wiersza polecenia platformy Azure ten przewodnik Szybki start wymaga interfejsu wiersza polecenia w wersji __2.0.28__ lub nowszej. Uruchom polecenie `az --version`, aby upewnić się, że dany interfejs wiersza polecenia spełnia ten wymóg. Jeśli konieczna będzie instalacja lub uaktualnienie interfejsu, zobacz [Instalowanie interfejsu wiersza polecenia platformy Azure 2.0](/cli/azure/install-azure-cli).
+W przypadku instalacji lokalnej interfejsu wiersza polecenia platformy Azure ten przewodnik Szybki start wymaga interfejsu wiersza polecenia w wersji __2.0.28__ lub nowszej. Uruchom polecenie `az --version`, aby upewnić się, że dany interfejs wiersza polecenia spełnia ten wymóg. Jeśli konieczna będzie instalacja lub uaktualnienie interfejsu, zobacz [Instalowanie interfejsu wiersza polecenia platformy Azure](/cli/azure/install-azure-cli).
 
-## <a name="install-the-azure-sdk-for-go"></a>Instalowanie zestawu Azure SDK dla języka Go 
+## <a name="install-the-azure-sdk-for-go"></a>Instalowanie zestawu Azure SDK dla języka Go
 
 [!INCLUDE [azure-sdk-go-get](includes/azure-sdk-go-get.md)]
 
@@ -242,7 +242,9 @@ Pliki wdrożenia są ładowane przez element `readJSON` (szczegóły zostały tu
     }
 ```
 
-Ten kod jest zgodny z tym samym wzorcem używanym podczas tworzenia grupy zasobów. Zostaje utworzony nowy klient (pod warunkiem, że uwierzytelnienie w usłudze Azure jest możliwe), a następnie zostaje wywołana metoda. Metoda ma nawet taką samą nazwę (`CreateOrUpdate`) co analogiczna metoda dotycząca grupy zasobów. Ten wzorzec jest widoczny w zestawie SDK. Metody, które mają podobne działanie, mają zwykle taką samą nazwę.
+Ten kod jest zgodny z tym samym wzorcem używanym podczas tworzenia grupy zasobów. Zostaje utworzony nowy klient (pod warunkiem, że uwierzytelnienie w usłudze Azure jest możliwe), a następnie zostaje wywołana metoda.
+Metoda ma nawet taką samą nazwę (`CreateOrUpdate`) co analogiczna metoda dotycząca grupy zasobów. Ten wzorzec jest widoczny w zestawie SDK.
+Metody, które mają podobne działanie, mają zwykle taką samą nazwę.
 
 Największa różnica dotyczy wartości zwracanej przez metodę `deploymentsClient.CreateOrUpdate`. Ta wartość ma typ [Future](https://godoc.org/github.com/Azure/go-autorest/autorest/azure#Future) zgodny z [wzorcem projektowym obiektu future](https://en.wikipedia.org/wiki/Futures_and_promises). Obiekty future reprezentują długotrwałą operację na platformie Azure, którą można sondować, anulować lub blokować po ich wykonaniu.
 
