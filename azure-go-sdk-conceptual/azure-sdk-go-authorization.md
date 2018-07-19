@@ -12,12 +12,12 @@ ms.technology: azure-sdk-go
 ms.devlang: go
 ms.service: active-directory
 ms.component: authentication
-ms.openlocfilehash: c7970167070bdf1f3fc75692f3e34268801c65df
-ms.sourcegitcommit: 181d4e0b164cf39b3feac346f559596bd19c94db
+ms.openlocfilehash: f5e76fc745512a3a52172f560c3a24f510e96feb
+ms.sourcegitcommit: d1790b317a8fcb4d672c654dac2a925a976589d4
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 07/11/2018
-ms.locfileid: "38067003"
+ms.lasthandoff: 07/14/2018
+ms.locfileid: "39039543"
 ---
 # <a name="authentication-methods-in-the-azure-sdk-for-go"></a>Metody uwierzytelniania w zestawie Azure SDK dla języka Go
 
@@ -30,19 +30,19 @@ Zestaw Azure SDK dla języka Go oferuje kilka różnych typów uwierzytelniania 
 | Typ uwierzytelniania | Zalecane, gdy... |
 |---------------------|---------------------|
 | Uwierzytelnianie oparte na certyfikatach | Masz certyfikat X509 skonfigurowany dla jednostki lub użytkownika usługi Azure Active Directory (AAD). Aby dowiedzieć się więcej, zobacz [Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory]. |
-| Poświadczenia klienta | Masz skonfigurowaną jednostkę usługi dla tej aplikacji lub klasy aplikacji, do której ona należy. Aby dowiedzieć się więcej, zobacz [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure 2.0]. |
+| Poświadczenia klienta | Masz skonfigurowaną jednostkę usługi dla tej aplikacji lub klasy aplikacji, do której ona należy. Aby dowiedzieć się więcej, zobacz [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure]. |
 | Tożsamość usługi zarządzanej (MSI, Managed Service Identity) | Aplikacja działa w obrębie zasobu platformy Azure, który został skonfigurowany przy użyciu tożsamości usługi zarządzanej (MSI). Aby dowiedzieć się więcej, zobacz [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]. |
 | Token urządzenia | Aplikacja jest przeznaczona __tylko__ do użycia w trybie interaktywnym i ma różnych użytkowników potencjalnie z wielu dzierżaw usługi AAD. Użytkownicy mogą logować się za pomocą przeglądarki internetowej. Aby uzyskać więcej informacji, zobacz [Używanie tokenu urządzenia](#use-device-token-authentication).|
 | Nazwa użytkownika/hasło | Masz interaktywną aplikację, która nie może używać innej metody uwierzytelniania. Użytkownicy nie mają włączonego uwierzytelniania wieloskładnikowego na potrzeby logowania do usługi AAD. |
 
 > [!IMPORTANT]
 > Jeśli używasz typu uwierzytelniania innego niż poświadczenia klienta, aplikacja musi zostać zarejestrowana w usłudze Azure Active Directory. Aby dowiedzieć się, jak to zrobić, zobacz [Integrating applications with Azure Active Directory (Integrowanie aplikacji za pomocą usługi Azure Active Directory)](/azure/active-directory/develop/active-directory-integrating-applications).
-
+>
 > [!NOTE]
 > Jeśli nie masz specjalnych wymagań, unikaj uwierzytelniania nazwy użytkownika/hasła. W sytuacjach, w których logowanie oparte na użytkowniku jest właściwym rozwiązaniem, przeważnie można w zamian użyć uwierzytelniania tokenu urządzenia.
 
 [Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory]: /azure/active-directory/active-directory-certificate-based-authentication-get-started
-[Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure 2.0]: /cli/azure/create-an-azure-service-principal-azure-cli
+[Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure]: /cli/azure/create-an-azure-service-principal-azure-cli
 [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]: /azure/active-directory/managed-service-identity/overview
 
 Te typy uwierzytelniania są dostępne za pośrednictwem różnych metod. [_Uwierzytelnianie oparte na środowisku_](#use-environment-based-authentication) polega na odczytywaniu poświadczeń bezpośrednio ze środowiska programu. [_Uwierzytelnianie na podstawie pliku_](#use-file-based-authentication) polega na załadowaniu pliku zawierającego poświadczenia jednostki usługi. [_Uwierzytelnianie oparte na kliencie_](#use-an-authentication-client) polega na użyciu obiektu w kodzie języka Go i wyznaczenie użytkownika jako osoby odpowiedzialnej za podawanie poświadczeń podczas wykonywania programu. Ponadto [_uwierzytelnianie tokenu urządzenia_](#use-device-token-authentication) wymaga od użytkowników interaktywnego logowania za pośrednictwem przeglądarki internetowej przy użyciu tokenu i nie może być używane z uwierzytelnianiem w oparciu o środowisko lub plik.
@@ -54,7 +54,7 @@ Wszystkie typy i funkcje uwierzytelniania są dostępne w pakiecie `github.com/A
 
 ## <a name="use-environment-based-authentication"></a>Używanie uwierzytelniania opartego na środowisku
 
-Jeśli korzystasz z aplikacji w środowisku ściśle kontrolowanym, takim jak kontener, uwierzytelnianie oparte na środowisku jest naturalnym wyborem. Możesz skonfigurować środowisko powłoki przed uruchomieniem aplikacji. Zestaw SDK dla języka Go odczyta te zmienne środowiskowe w czasie wykonywania w celu uwierzytelnienia przy użyciu platformy Azure. 
+Jeśli korzystasz z aplikacji w środowisku ściśle kontrolowanym, takim jak kontener, uwierzytelnianie oparte na środowisku jest naturalnym wyborem. Możesz skonfigurować środowisko powłoki przed uruchomieniem aplikacji. Zestaw SDK dla języka Go odczyta te zmienne środowiskowe w czasie wykonywania w celu uwierzytelnienia przy użyciu platformy Azure.
 
 Uwierzytelnianie oparte na środowisku oferuje obsługę wszystkich metod uwierzytelniania, z wyjątkiem tokenów urządzeń, a obliczenia będą wykonywane w następującej kolejności: poświadczenia klienta, certyfikaty, nazwa użytkownika/hasło i tożsamość usługi zarządzanej (MSI). Jeśli nie ustawiono wymaganej zmiennej środowiskowej lub zestaw SDK otrzyma odmowę z usługi uwierzytelniania, zostanie podjęta próba użycia kolejnego typu uwierzytelniania. Jeśli zestaw SDK nie może uwierzytelnić ze środowiska, zwraca błąd.
 
@@ -109,10 +109,9 @@ Adres `ResourceManagerURL` różni się w zależności od nazwy regionu, nazwy m
 
 Aby uzyskać więcej informacji na temat korzystania z zestawu Azure SDK dla języka Go w usłudze Azure Stack, zobacz [Korzystanie z profili wersji interfejsu API za pomocą języka Go w usłudze Azure Stack](https://docs.microsoft.com/azure/azure-stack/user/azure-stack-version-profiles-go)
 
-
 ## <a name="use-file-based-authentication"></a>Używanie uwierzytelniania opartego na pliku
 
-Uwierzytelnianie oparte na pliku działa tylko z poświadczeniami klienta przechowywanymi w formacie pliku lokalnego generowanym przez [interfejs wiersza polecenia platformy Azure w wersji 2.0](/cli/azure). Można łatwo utworzyć ten plik, tworząc nową jednostkę usługi przy użyciu parametru `--sdk-auth`. Jeśli planujesz użycie uwierzytelniania opartego na pliku, upewnij się, że ten argument zostanie podany podczas tworzenia jednostki usługi. Ponieważ interfejs wiersza polecenia wyświetla dane wyjściowe w lokalizacji `stdout`, przekieruj dane wyjściowe do pliku.
+Uwierzytelnianie oparte na pliku działa tylko z poświadczeniami klienta przechowywanymi w formacie pliku lokalnego generowanego przez [interfejs wiersza polecenia platformy Azure](/cli/azure). Można łatwo utworzyć ten plik, tworząc nową jednostkę usługi przy użyciu parametru `--sdk-auth`. Jeśli planujesz użycie uwierzytelniania opartego na pliku, upewnij się, że ten argument zostanie podany podczas tworzenia jednostki usługi. Ponieważ interfejs wiersza polecenia wyświetla dane wyjściowe w lokalizacji `stdout`, przekieruj dane wyjściowe do pliku.
 
 ```azurecli
 az ad sp create-for-rbac --sdk-auth > azure.auth
@@ -127,7 +126,7 @@ import "github.com/Azure/go-autorest/autorest/azure/auth"
 authorizer, err := NewAuthorizerFromFile(azure.PublicCloud.ResourceManagerEndpoint)
 ```
 
-Aby uzyskać więcej informacji na temat używania jednostek usług i zarządzania ich uprawnieniami dostępu, zobacz [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure 2.0].
+Aby uzyskać więcej informacji na temat używania jednostek usług i zarządzania ich uprawnieniami dostępu, zobacz [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure].
 
 ## <a name="use-device-token-authentication"></a>Używanie uwierzytelniania tokenu urządzenia
 
