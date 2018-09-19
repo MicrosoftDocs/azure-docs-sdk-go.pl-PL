@@ -4,22 +4,21 @@ description: Wybrane przykłady do pracy z usługą Azure Active Directory (AAD)
 author: sptramer
 ms.author: sttramer
 manager: carmonm
-ms.date: 03/21/2018
+ms.date: 09/05/2018
 ms.topic: sample
-ms.prod: azure
 ms.technology: azure-sdk-go
 ms.service: active-directory
 ms.devlang: go
-ms.openlocfilehash: dfaed972f23daa92fcec686cf34ee636aa624b9a
-ms.sourcegitcommit: 0f581979216f7c9d4913681a6d9f6fe09af26e43
+ms.openlocfilehash: ace50d88ac57622b90e4070a6ca8d6fc0a52afac
+ms.sourcegitcommit: 8b9e10b960150dc08f046ab840d6a5627410db29
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 08/02/2018
-ms.locfileid: "39475878"
+ms.lasthandoff: 09/07/2018
+ms.locfileid: "44059224"
 ---
 # <a name="azure-sdk-for-go-samples-for-authentication-and-aad"></a>Przykłady zestawu Azure SDK dla języka Go dla uwierzytelniania i usługi AAD
 
-Poniższa tabela zawiera linki do wybranych przykładów kodu źródłowego języka Go, których możesz użyć do uwierzytelniania przy użyciu zestawu Azure SDK dla języka Go i pracy z usługami Azure Active Directory (AAD).
+Poniższa tabela zawiera linki do wybranych przykładów, które pokazują możliwości uwierzytelniania oraz korzystania z usługi Azure Active Directory z poziomu zestawu Azure SDK dla języka Go.
 
 Wszystkie przykłady z zestawu Azure SDK dla języka Go są dostępne w serwisie [GitHub](https://github.com/Azure-Samples/azure-sdk-for-go-samples).
 

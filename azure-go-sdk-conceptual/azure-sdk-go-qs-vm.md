@@ -4,24 +4,26 @@ description: Wdróż maszynę wirtualną za pomocą zestawu Azure SDK dla język
 author: sptramer
 ms.author: sttramer
 manager: carmonm
-ms.date: 07/13/2018
+ms.date: 09/05/2018
 ms.topic: quickstart
-ms.prod: azure
 ms.technology: azure-sdk-go
 ms.service: virtual-machines
 ms.devlang: go
-ms.openlocfilehash: 6b1de35748fb7694d45715fa7f028d5730530d2e
-ms.sourcegitcommit: d1790b317a8fcb4d672c654dac2a925a976589d4
+ms.openlocfilehash: a7970be0857fd414d776241b033af0c23457790c
+ms.sourcegitcommit: 8b9e10b960150dc08f046ab840d6a5627410db29
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 07/14/2018
-ms.locfileid: "39039560"
+ms.lasthandoff: 09/07/2018
+ms.locfileid: "44059139"
 ---
 # <a name="quickstart-deploy-an-azure-virtual-machine-from-a-template-with-the-azure-sdk-for-go"></a>Szybki start: wdrażanie maszyny wirtualnej platformy Azure za pomocą szablonu i zestawu Azure SDK dla języka Go
 
-Ten przewodnik Szybki start prezentuje sposób wdrożenia zasobów z szablonu za pomocą zestawu Azure SDK dla języka Go. Szablony to migawki poszczególnych zasobów zawarte w [grupie zasobów platformy Azure](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-overview). W ramach tej procedury, podczas wykonywania przydatnego zadania, poznasz funkcje i konwencje zestawu SDK.
+Ten przewodnik Szybki start przedstawia sposób wdrażania zasobów z szablonu usługi Azure Resource Manager przy użyciu zestawu Azure SDK dla języka Go. Szablony są migawkami wszystkich zasobów zawartych w [grupie zasobów platformy Azure](/azure/azure-resource-manager/resource-group-overview). W ramach tej procedury poznasz funkcje i konwencje zestawu SDK.
 
 Na końcu tego przewodnika znajdują się dane działającej maszyny wirtualnej, na której możesz się zalogować się przy użyciu nazwy użytkownika i hasła.
+
+> [!NOTE]
+> Aby zobaczyć tworzenie maszyny wirtualnej w języku Go bez użycia szablonu usługi Resource Manager, przejdź do [przykładu](https://github.com/Azure-Samples/azure-sdk-for-go-samples/blob/master/compute/vm.go) przedstawiającego sposób tworzenia i konfigurowania wszystkich zasobów maszyn wirtualnych za pomocą zestawu SDK. Zastosowanie szablonu w tym przykładzie umożliwia skupienie się na konwencjach zestawu SDK bez zagłębiania się w zbyt wiele szczegółów dotyczących architektury usługi platformy Azure.
 
 [!INCLUDE [quickstarts-free-trial-note](includes/quickstarts-free-trial-note.md)]
 
@@ -38,7 +40,7 @@ W przypadku instalacji lokalnej interfejsu wiersza polecenia platformy Azure ten
 Aby można było zalogować się do platformy Azure za pomocą aplikacji w sposób nieinterakcyjny, potrzebna jest jednostka usługi. Jednostki usługi stanowią część kontroli dostępu na podstawie ról (RBAC) tworzącej unikatową tożsamość użytkownika. Aby utworzyć nową jednostkę usługi za pomocą interfejsu wiersza polecenia, uruchom następujące polecenie:
 
 ```azurecli-interactive
-az ad sp create-for-rbac --name az-go-vm-quickstart --sdk-auth > quickstart.auth
+az ad sp create-for-rbac --sdk-auth > quickstart.auth
 ```
 
 Ustaw zmienną środowiskową `AZURE_AUTH_LOCATION` tak, aby była pełną ścieżką do tego pliku. Następnie zestaw SDK zlokalizuje i odczyta poświadczenia bezpośrednio z tego pliku, bez konieczności wprowadzania zmian ani rejestrowania informacji z jednostki usługi.
@@ -62,13 +64,7 @@ cd $GOPATH/src/github.com/azure-samples/azure-sdk-for-go-samples/quickstarts/dep
 go run main.go
 ```
 
-Jeśli we wdrożeniu jest błąd, zostanie wyświetlony komunikat, który informuje, że wystąpił problem, ale może nie zawierać wystarczających szczegółowych informacji. Korzystając z interfejsu wiersza polecenia platformy Azure, pobierz pełne szczegóły dotyczące błędu wdrożenia przy użyciu następującego polecenia:
-
-```azurecli-interactive
-az group deployment show -g GoVMQuickstart -n VMDeployQuickstart
-```
-
-Jeśli wdrażanie zakończy się pomyślnie, zostanie wyświetlony komunikat zawierający nazwę użytkownika, adres IP i hasło umożliwiające zalogowanie się na nowo utworzonej maszynie wirtualnej. Logując się za pomocą protokołu SSH, sprawdź, czy maszyna wirtualna faktycznie jest uruchomiona i gotowa.
+Jeśli wdrażanie zakończy się pomyślnie, zostanie wyświetlony komunikat zawierający nazwę użytkownika, adres IP i hasło umożliwiające zalogowanie się na nowo utworzonej maszynie wirtualnej. Spróbuj zalogować się do tej maszyny wirtualnej za pomocą protokołu SSH, aby sprawdzić, czy jest uruchomiona i działa. 
 
 ## <a name="cleaning-up"></a>Czyszczenie
 
@@ -77,6 +73,18 @@ Wyczyść zasoby utworzone w ramach tego szybkiego startu, usuwając grupę zaso
 ```azurecli-interactive
 az group delete -n GoVMQuickstart
 ```
+
+Usuń również utworzoną wcześniej jednostkę usługi. W pliku `quickstart.auth` znajduje się klucz JSON dla elementu `clientId`. Skopiuj tę wartość do zmiennej środowiskowej `CLIENT_ID_VALUE` i uruchom następujące polecenie w wierszu polecenia platformy Azure:
+
+```azurecli-interactive
+az ad sp delete --id ${CLIENT_ID_VALUE}
+```
+
+Tu podaj wartość `CLIENT_ID_VALUE` pobraną z pliku `quickstart.auth`.
+
+> [!WARNING]
+> Nieusunięcie jednostki usługi dla tej aplikacji pozostawi ją aktywną w Twojej dzierżawie usługi Azure Active Directory.
+> Chociaż nazwa i hasło dla jednostki usługi są generowane jako identyfikatory UUID, ze względów bezpieczeństwa usuń wszystkie nieużywane jednostki usługi i aplikacje platformy Azure Active Directory.
 
 ## <a name="code-in-depth"></a>Szczegóły kodu
 
@@ -111,7 +119,7 @@ var (
 
 Deklarowane wartości zapewniają nazwy utworzonych zasobów. Podano tutaj także lokalizację. Można ją zmienić, aby sprawdzić zachowanie wdrożeń w innych centrach danych. Nie każde centrum danych ma dostępne wszystkie wymagane zasoby.
 
-Typ `clientInfo` został zadeklarowany w celu hermetyzacji wszystkich informacji, które należy niezależnie załadować z pliku uwierzytelniania, aby skonfigurować klientów w zestawie SDK i ustawić hasło maszyny wirtualnej.
+Typ `clientInfo` przechowuje informacje załadowane z pliku uwierzytelniania w celu skonfigurowania klientów w zestawie SDK i ustawienia hasła maszyny wirtualnej.
 
 Stałe `templateFile` i `parametersFile` wskazują pliki potrzebne do wdrożenia. Element `authorizer` zostanie skonfigurowany przez zestaw SDK języka Go w celu uwierzytelnienia, a zmienna `ctx` to [kontekst języka Go](https://blog.golang.org/context) dla operacji sieciowych.
 
@@ -168,9 +176,9 @@ Oto działania wykonywane przez kod (z zachowaniem kolejności):
 
 * Utworzenie grupy zasobów, w której ma zostać przeprowadzone wdrażanie (`createGroup`)
 * Utworzenie wdrożenia w tej grupie (`createDeployment`)
-* Uzyskanie i wyświetlenie danych logowania dotyczących wdrożonej maszyny wirtualnej (`getLogin`)
+* Uzyskiwanie i wyświetlanie danych logowania dotyczących wdrożonej maszyny wirtualnej (`getLogin`)
 
-### <a name="creating-the-resource-group"></a>Tworzenie grupy zasobów
+### <a name="create-the-resource-group"></a>Tworzenie grupy zasobów
 
 Funkcja `createGroup` umożliwia utworzenie grupy zasobów. Przepływ wywołań i argumenty pozwalają zapoznać się ze strukturą interakcji z usługami w zestawie SDK.
 
@@ -197,7 +205,7 @@ Funkcja [`to.StringPtr`](https://godoc.org/github.com/Azure/go-autorest/autorest
 
 Metoda `groupsClient.CreateOrUpdate` zwraca wskaźnik do typu danych reprezentującego grupę zasobów. Bezpośrednia zwracana wartość tego rodzaju wskazuje krótkotrwałą operację, która ma być synchroniczna. W następnej sekcji przedstawimy przykład długotrwałej operacji i sposób interakcji z nią.
 
-### <a name="performing-the-deployment"></a>Przeprowadzanie wdrażania
+### <a name="perform-the-deployment"></a>Wykonywanie wdrożenia
 
 Po utworzeniu grupy zasobów można uruchomić wdrożenie. Ten kod został podzielony na mniejsze części w celu wyróżnienia różnych części logiki kodu.
 
@@ -254,20 +262,13 @@ Największa różnica dotyczy wartości zwracanej przez metodę `deploymentsClie
     if err != nil {
         return
     }
-    deployment, err = deploymentFuture.Result(deploymentsClient)
-
-    // Work around possible bugs or late-stage failures
-    if deployment.Name == nil || err != nil {
-        deployment, _ = deploymentsClient.Get(ctx, resourceGroupName, deploymentName)
-    }
-    return
+    return deploymentFuture.Result(deploymentsClient)
+}
 ```
 
 W przypadku tego przykładu najlepiej zaczekać na ukończenie operacji. Oczekiwanie na obiekt future wymaga zarówno [obiektu kontekstu](https://blog.golang.org/context), jak i klienta, który utworzył obiekt `Future`. Istnieją tutaj dwa możliwe źródła błędu: błąd występujący po stronie klienta podczas próby wywołania metody oraz odpowiedź serwera z informacją o błędzie. Ta druga jest zwracana jako część wywołania `deploymentFuture.Result`.
 
-Po pobraniu informacji o wdrożeniu istnieje obejście tego problemu w przypadku możliwych usterek. Informacje o wdrożeniu mogą być puste i wymagać ręcznego wywołania do elementu `deploymentsClient.Get` w celu upewnienia się, że dane zostały wypełnione.
-
-### <a name="obtaining-the-assigned-ip-address"></a>Uzyskiwanie przypisanego adresu IP
+### <a name="get-the-assigned-ip-address"></a>Uzyskiwanie przypisanego adresu IP
 
 Aby można było korzystać z nowo utworzonej maszyny wirtualnej, trzeba mieć przypisany adres IP. Adresy IP stanowią oddzielne zasoby platformy Azure powiązane z zasobami kontrolera interfejsu sieciowego.
 
@@ -301,7 +302,7 @@ Wartość dla użytkownika maszyny wirtualnej jest również ładowana z kodu JS
 
 ## <a name="next-steps"></a>Następne kroki
 
-W tym przewodniku Szybki start istniejący szablon został wdrożony za pomocą języka Go. Następnie nastąpiło nawiązanie połączenia z nowo utworzoną maszyną wirtualną za pośrednictwem protokołu SSH. To pozwoliło upewnić się, że maszyna jest uruchomiona.
+W tym przewodniku Szybki start istniejący szablon został wdrożony za pomocą języka Go. Następnie nastąpiło nawiązanie połączenia z nowo utworzoną maszyną wirtualną za pośrednictwem protokołu SSH.
 
 Aby uzyskać więcej informacji o pracy z maszynami wirtualnymi w środowisku platformy Azure z użyciem języka Go, zapoznaj się z [przykładami dotyczącymi obliczeń na platformie Azure dla języka Go](https://github.com/Azure-Samples/azure-sdk-for-go-samples/tree/master/compute) lub [przykładami dotyczącymi zarządzania zasobami na platformie Azure dla języka Go](https://github.com/Azure-Samples/azure-sdk-for-go-samples/tree/master/resources).
 

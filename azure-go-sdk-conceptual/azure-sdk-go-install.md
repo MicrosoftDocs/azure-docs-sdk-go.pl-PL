@@ -9,12 +9,12 @@ ms.topic: conceptual
 ms.prod: azure
 ms.technology: azure-sdk-go
 ms.devlang: go
-ms.openlocfilehash: 3388359bba791c87025b6ffd0e6b476f95589f73
-ms.sourcegitcommit: 81e97407e6139375bf7357045e818c87a17dcde1
+ms.openlocfilehash: 013a771345d96f0fa8dbece3218a01650744f70b
+ms.sourcegitcommit: 8b9e10b960150dc08f046ab840d6a5627410db29
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 06/19/2018
-ms.locfileid: "36262984"
+ms.lasthandoff: 09/07/2018
+ms.locfileid: "44059190"
 ---
 # <a name="install-the-azure-sdk-for-go"></a>Instalowanie zestawu Azure SDK dla języka Go
 
@@ -37,9 +37,9 @@ Niektóre usługi platformy Azure mają własne zestawy SDK dla języka Go, któ
 
 ## <a name="vendor-the-azure-sdk-for-go"></a>Zapewnianie zasobów zestawu Azure SDK dla języka Go
 
-Zestaw Azure SDK dla języka Go umożliwia zapewnianie zasobów za pośrednictwem narzędzia [dep](https://github.com/golang/dep). Ze względu na stabilność zapewnianie zasobów jest zalecane. Aby można było korzystać z narzędzia `dep`, dodaj ciąg `github.com/Azure/azure-sdk-for-go` do sekcji `[[constraint]]` w pliku `Gopkg.toml`. Aby na przykład zapewnić zasoby z wersji `14.0.0`, dodaj następujący wpis:
+Zestaw Azure SDK dla języka Go umożliwia zapewnianie zasobów za pośrednictwem narzędzia [dep](https://github.com/golang/dep). Ze względu na stabilność zapewnianie zasobów jest zalecane. Aby użyć narzędzia `dep` we własnym projekcie, dodaj element `github.com/Azure/azure-sdk-for-go` do sekcji `[[constraint]]` Twojego pliku `Gopkg.toml`. Aby na przykład zapewnić zasoby z wersji `14.0.0`, dodaj następujący wpis:
 
-```
+```toml
 [[constraint]]
 name = "github.com/Azure/azure-sdk-for-go"
 version = "14.0.0"
@@ -62,13 +62,14 @@ Pełną listę dostępnych modułów można uzyskać w dokumentacji GoDoc dotycz
 [autorest/adal]: https://godoc.org/github.com/Azure/go-autorest/autorest/adal
 [autorest/to]: https://godoc.org/github.com/Azure/go-autorest/autorest/to
 
-Moduły usług platformy Azure mają numery wersji niezależne od przeznaczonych dla nich interfejsów API zestawu SDK. Wersje te stanowią część ścieżki importu modułu i pochodzą od _wersji usługi_ lub _profilu_. Obecnie zalecamy używanie określonej wersji usługi zarówno na etapie tworzenia, jak i udostępniania. Usługi znajdują się w module `services`. Pełna ścieżka importu obejmuje kolejno nazwę usługi, wersję w formacie `YYYY-MM-DD` i ponownie nazwę usługi. Na przykład, aby uwzględnić wersję `2017-03-30` usługi Compute:
+Wersje pakietów języka Go i usług platformy Azure są określane niezależnie. Wersje usługi są częścią ścieżki importu modułu — za modułem `services`. Pełna ścieżka modułu obejmuje kolejno nazwę usługi, wersję w formacie `YYYY-MM-DD` i ponownie nazwę usługi. Przykład importu wersji `2017-03-30` usługi Compute:
 
 ```go
 import "github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2017-03-30/compute"
 ```
 
-Obecnie zalecamy używanie najnowszej wersji usługi, chyba że istnieje powód, aby tego nie robić.
+Zaleca się użycie najnowszej wersji usługi w momencie rozpoczęcia programowania i stosowanie jej spójnie.
+Wymagania dotyczące usług mogą zmieniać się w zależności od wersji, co może uszkodzić kod, nawet jeśli nie zostaną zainstalowane żadne aktualizacje zestawu SDK dla języka Go w tym czasie.
 
 Jeśli jest potrzebna zbiorcza migawka usług, możesz również wybrać jedną wersję profilu. Obecnie jedynym zablokowanym profilem jest wersja `2017-03-09`, która może nie obejmować najnowszych funkcji usługi. Profile znajdują się w module `profiles` i mają wersję w formacie `YYYY-MM-DD`. Usługi są podzielone na grupy według wersji profilu. Aby na przykład zaimportować moduł zarządzania zasobami platformy Azure z profilu `2017-03-09`:
 

@@ -2,21 +2,21 @@
 author: sptramer
 ms.author: sttramer
 manager: carmonm
-ms.date: 02/14/2018
+ms.date: 09/05/2018
 ms.topic: include
 ms.prod: azure
 ms.technology: azure-cli
-ms.openlocfilehash: d021dd8ef4744b7c50b296b231bf63481f92411a
-ms.sourcegitcommit: 2a3bd491e087a1d0e7d269bed896c029357d62a6
+ms.openlocfilehash: 5df14f939efdd0550b49261c88c8dc6518ada459
+ms.sourcegitcommit: 8b9e10b960150dc08f046ab840d6a5627410db29
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 07/12/2018
-ms.locfileid: "38988076"
+ms.lasthandoff: 09/07/2018
+ms.locfileid: "44059275"
 ---
-Zestaw [Azure SDK dla języka Go](https://github.com/Azure/azure-sdk-for-go) jest zgodny z językiem Go w wersji 1.8 lub nowszej. W przypadku środowisk korzystających z [profilów Azure Stack](https://docs.microsoft.com/azure/azure-stack/azure-stack-version-profiles) wymagana jest wersja 1.9 lub nowsza.
-Jeśli w danym systemie nie ma języka Go, wykonaj [instrukcje instalacji języka Go](https://golang.org/doc/install).
+Zestaw [Azure SDK dla języka Go](https://github.com/Azure/azure-sdk-for-go) jest zgodny z językiem Go w wersji 1.8 lub nowszej. W przypadku środowisk korzystających z [profilów Azure Stack](/azure/azure-stack/user/azure-stack-version-profiles-go) wymagana jest wersja 1.9 lub nowsza.
+Jeśli chcesz zainstalować język Go, wykonaj [instrukcje instalacji języka Go](https://golang.org/doc/install).
 
-Zestaw Azure SDK dla języka Go i jego zależności można uzyskać za pomocą polecenia `go get`.
+Zestaw Azure SDK dla języka Go i jego zależności można pobrać za pomocą polecenia `go get`.
 
 ```bash
 go get -u -d github.com/Azure/azure-sdk-for-go/...

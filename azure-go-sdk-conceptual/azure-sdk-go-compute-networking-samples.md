@@ -4,22 +4,21 @@ description: Wybrane przykłady do pracy z zasobami obliczeniowymi, takimi jak m
 author: sptramer
 ms.author: sttramer
 manager: carmonm
-ms.date: 03/21/2018
+ms.date: 09/05/2018
 ms.topic: sample
-ms.prod: azure
 ms.technology: azure-sdk-go
 ms.service: virtual-machines
 ms.devlang: go
-ms.openlocfilehash: 3b31716ee42c638bab4a6dd99b9eb0d7c07e51a4
-ms.sourcegitcommit: 0f581979216f7c9d4913681a6d9f6fe09af26e43
+ms.openlocfilehash: d570ad8598ae06633d0010245c207641161ee446
+ms.sourcegitcommit: 8b9e10b960150dc08f046ab840d6a5627410db29
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 08/02/2018
-ms.locfileid: "39475793"
+ms.lasthandoff: 09/07/2018
+ms.locfileid: "44059088"
 ---
 # <a name="azure-sdk-for-go-samples-for-compute-and-networking"></a>Przykłady z zestawu Azure SDK dla języka Go dla zasobów obliczeniowych i sieci
 
-Poniższa tabela zawiera linki do wybranych przykładów kodu źródłowego języka Go, których możesz użyć do zarządzania maszynami wirtualnymi, sieciami wirtualnymi i podsieciami na platformie Azure. 
+Poniższa tabela zawiera linki do wybranych przykładów, które pokazują, w jaki sposób można zarządzać obliczeniami i zasobami sieci wirtualnej w zestawie Azure SDK dla języka Go.
 
 Wszystkie przykłady z zestawu Azure SDK dla języka Go są dostępne w serwisie [GitHub](https://github.com/Azure-Samples/azure-sdk-for-go-samples).
 

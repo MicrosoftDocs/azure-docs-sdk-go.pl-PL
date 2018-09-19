@@ -5,23 +5,22 @@ services: azure
 author: sptramer
 ms.author: sttramer
 manager: carmonm
-ms.date: 04/03/2018
+ms.date: 09/05/2018
 ms.topic: conceptual
-ms.prod: azure
 ms.technology: azure-sdk-go
 ms.devlang: go
 ms.service: active-directory
 ms.component: authentication
-ms.openlocfilehash: f5e76fc745512a3a52172f560c3a24f510e96feb
-ms.sourcegitcommit: d1790b317a8fcb4d672c654dac2a925a976589d4
+ms.openlocfilehash: 28fd4a4c0832ab19dcf52dc549d0ddc0d1eec6f1
+ms.sourcegitcommit: 8b9e10b960150dc08f046ab840d6a5627410db29
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 07/14/2018
-ms.locfileid: "39039543"
+ms.lasthandoff: 09/07/2018
+ms.locfileid: "44059105"
 ---
 # <a name="authentication-methods-in-the-azure-sdk-for-go"></a>Metody uwierzytelniania w zestawie Azure SDK dla języka Go
 
-Zestaw Azure SDK dla języka Go oferuje różne typy i metody uwierzytelniania do użycia w aplikacji. Obsługiwane metody uwierzytelniania obejmują zarówno ściąganie informacji ze zmiennych środowiskowych, jak i interaktywne uwierzytelnianie oparte na Internecie. W tym artykule przedstawiono dostępne typy uwierzytelniania w zestawie SDK oraz metody ich używania. Opisano w nim również najlepsze rozwiązania dotyczące wybierania typu uwierzytelniania odpowiedniego dla aplikacji.
+Zestaw Azure SDK dla języka Go oferuje różne sposoby uwierzytelniania na platformie Azure. Te _typy_ uwierzytelniania są wywoływane przez różne _metody_ uwierzytelniania. Ten artykuł zawiera opis dostępnych typów i metod oraz informacje pozwalające na wybranie najbardziej odpowiedniego rozwiązania dla Twojej aplikacji.
 
 ## <a name="available-authentication-types-and-methods"></a>Dostępne metody i typy uwierzytelniania
 
@@ -32,8 +31,8 @@ Zestaw Azure SDK dla języka Go oferuje kilka różnych typów uwierzytelniania 
 | Uwierzytelnianie oparte na certyfikatach | Masz certyfikat X509 skonfigurowany dla jednostki lub użytkownika usługi Azure Active Directory (AAD). Aby dowiedzieć się więcej, zobacz [Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory]. |
 | Poświadczenia klienta | Masz skonfigurowaną jednostkę usługi dla tej aplikacji lub klasy aplikacji, do której ona należy. Aby dowiedzieć się więcej, zobacz [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure]. |
 | Tożsamość usługi zarządzanej (MSI, Managed Service Identity) | Aplikacja działa w obrębie zasobu platformy Azure, który został skonfigurowany przy użyciu tożsamości usługi zarządzanej (MSI). Aby dowiedzieć się więcej, zobacz [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]. |
-| Token urządzenia | Aplikacja jest przeznaczona __tylko__ do użycia w trybie interaktywnym i ma różnych użytkowników potencjalnie z wielu dzierżaw usługi AAD. Użytkownicy mogą logować się za pomocą przeglądarki internetowej. Aby uzyskać więcej informacji, zobacz [Używanie tokenu urządzenia](#use-device-token-authentication).|
-| Nazwa użytkownika/hasło | Masz interaktywną aplikację, która nie może używać innej metody uwierzytelniania. Użytkownicy nie mają włączonego uwierzytelniania wieloskładnikowego na potrzeby logowania do usługi AAD. |
+| Token urządzenia | Twoja aplikacja jest przeznaczona do korzystania z niej __tylko__ w sposób interaktywny. Użytkownicy mogą mieć włączone uwierzytelnianie wieloskładnikowe. Użytkownicy mogą logować się za pomocą przeglądarki internetowej. Aby uzyskać więcej informacji, zobacz [Używanie tokenu urządzenia](#use-device-token-authentication).|
+| Nazwa użytkownika/hasło | Posiadasz interaktywną aplikację, dla której nie może być używana inna metoda uwierzytelniania. Użytkownicy nie mają włączonego uwierzytelniania wieloskładnikowego na potrzeby logowania do usługi AAD. |
 
 > [!IMPORTANT]
 > Jeśli używasz typu uwierzytelniania innego niż poświadczenia klienta, aplikacja musi zostać zarejestrowana w usłudze Azure Active Directory. Aby dowiedzieć się, jak to zrobić, zobacz [Integrating applications with Azure Active Directory (Integrowanie aplikacji za pomocą usługi Azure Active Directory)](/azure/active-directory/develop/active-directory-integrating-applications).
@@ -45,7 +44,12 @@ Zestaw Azure SDK dla języka Go oferuje kilka różnych typów uwierzytelniania 
 [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure]: /cli/azure/create-an-azure-service-principal-azure-cli
 [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]: /azure/active-directory/managed-service-identity/overview
 
-Te typy uwierzytelniania są dostępne za pośrednictwem różnych metod. [_Uwierzytelnianie oparte na środowisku_](#use-environment-based-authentication) polega na odczytywaniu poświadczeń bezpośrednio ze środowiska programu. [_Uwierzytelnianie na podstawie pliku_](#use-file-based-authentication) polega na załadowaniu pliku zawierającego poświadczenia jednostki usługi. [_Uwierzytelnianie oparte na kliencie_](#use-an-authentication-client) polega na użyciu obiektu w kodzie języka Go i wyznaczenie użytkownika jako osoby odpowiedzialnej za podawanie poświadczeń podczas wykonywania programu. Ponadto [_uwierzytelnianie tokenu urządzenia_](#use-device-token-authentication) wymaga od użytkowników interaktywnego logowania za pośrednictwem przeglądarki internetowej przy użyciu tokenu i nie może być używane z uwierzytelnianiem w oparciu o środowisko lub plik.
+Te typy uwierzytelniania są dostępne za pośrednictwem różnych metod.
+
+* [_Uwierzytelnianie oparte na środowisku_](#use-environment-based-authentication) polega na odczytywaniu poświadczeń bezpośrednio ze środowiska programu.
+* [_Uwierzytelnianie na podstawie pliku_](#use-file-based-authentication) polega na załadowaniu pliku zawierającego poświadczenia jednostki usługi.
+* [_Uwierzytelnianie oparte na kliencie_](#use-an-authentication-client) polega na użyciu obiektu w kodzie i wyznaczeniu użytkownika jako osoby odpowiedzialnej za podawanie poświadczeń podczas wykonywania programu.
+* [_Uwierzytelnianie tokenu urządzenia_](#use-device-token-authentication) wymaga od użytkowników interaktywnego logowania się przez przeglądarkę internetową przy użyciu tokenu.
 
 Wszystkie typy i funkcje uwierzytelniania są dostępne w pakiecie `github.com/Azure/go-autorest/autorest/azure/auth`.
 
@@ -54,9 +58,16 @@ Wszystkie typy i funkcje uwierzytelniania są dostępne w pakiecie `github.com/A
 
 ## <a name="use-environment-based-authentication"></a>Używanie uwierzytelniania opartego na środowisku
 
-Jeśli korzystasz z aplikacji w środowisku ściśle kontrolowanym, takim jak kontener, uwierzytelnianie oparte na środowisku jest naturalnym wyborem. Możesz skonfigurować środowisko powłoki przed uruchomieniem aplikacji. Zestaw SDK dla języka Go odczyta te zmienne środowiskowe w czasie wykonywania w celu uwierzytelnienia przy użyciu platformy Azure.
+Jeśli korzystasz z aplikacji w kontrolowanych ustawieniach, uwierzytelnianie oparte na środowisku jest naturalnym wyborem. W przypadku tej metody uwierzytelniania konfigurujesz środowisko powłoki przed uruchomieniem aplikacji. W czasie wykonywania zestaw SDK dla języka Go odczytuje te zmienne środowiskowe do uwierzytelniania za pomocą platformy Azure.
 
-Uwierzytelnianie oparte na środowisku oferuje obsługę wszystkich metod uwierzytelniania, z wyjątkiem tokenów urządzeń, a obliczenia będą wykonywane w następującej kolejności: poświadczenia klienta, certyfikaty, nazwa użytkownika/hasło i tożsamość usługi zarządzanej (MSI). Jeśli nie ustawiono wymaganej zmiennej środowiskowej lub zestaw SDK otrzyma odmowę z usługi uwierzytelniania, zostanie podjęta próba użycia kolejnego typu uwierzytelniania. Jeśli zestaw SDK nie może uwierzytelnić ze środowiska, zwraca błąd.
+Uwierzytelnianie oparte na środowisku oferuje obsługę wszystkich metod uwierzytelniania, z wyjątkiem tokenów urządzeń, które są uwzględniane w następującej kolejności:
+
+* Poświadczenia klienta
+* Certyfikaty X509
+* Nazwa użytkownika/hasło
+* Tożsamość usługi zarządzanej (MSI, Managed Service Identity)
+
+Jeśli typ uwierzytelniania ma nieustawione wartości lub następuje odmowa, zestaw SDK automatycznie próbuje użyć kolejnego typu uwierzytelniania. Gdy nie ma już typów do wypróbowania, zestaw SDK zwraca błąd.
 
 W poniższej tabeli przedstawiono zmienne środowiskowe, które należy ustawić dla każdego typu uwierzytelniania obsługiwanego podczas uwierzytelniania opartego na środowisku.
 
@@ -73,14 +84,14 @@ W poniższej tabeli przedstawiono zmienne środowiskowe, które należy ustawić
 | | `AZURE_CLIENT_ID` | Identyfikator klienta aplikacji. |
 | | `AZURE_USERNAME` | Nazwa użytkownika na potrzeby logowania się. |
 | | `AZURE_PASSWORD` | Hasło na potrzeby logowania się. |
-| __MSI__ | | Usługa MSI nie wymaga ustawienia żadnych poświadczeń. Aplikacja musi działać w obrębie zasobu platformy Azure skonfigurowanego do użycia usługi MSI. Aby uzyskać szczegółowe informacje, zobacz [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]. |
+| __MSI__ | | W przypadku uwierzytelniania MSI nie są wymagane żadne poświadczenia. Aplikacja musi działać w obrębie zasobu platformy Azure skonfigurowanego do użycia usługi MSI. Aby uzyskać szczegółowe informacje, zobacz [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]. |
 
-Jeśli musisz nawiązać połączenie z punktem końcowym chmury lub zarządzania innym niż domyślna chmura platformy Azure, możesz również ustawić poniższe zmienne środowiskowe. Najbardziej typowe przyczyny ich ustawiania to korzystanie z usługi Azure Stack, chmury w innym regionie geograficznym lub klasycznego modelu wdrożenia platformy Azure.
+Aby nawiązać połączenie z punktem końcowym chmury lub zarządzania innym niż domyślna publiczna chmura platformy Azure, ustaw poniższe zmienne środowiskowe. Najbardziej typowe przyczyny ich ustawiania to korzystanie z usługi Azure Stack, z chmury w innym regionie geograficznym lub z klasycznego modelu wdrożenia platformy Azure.
 
 | Zmienna środowiskowa | Opis  |
 |----------------------|--------------|
 | `AZURE_ENVIRONMENT` | Nazwa środowiska chmury, z którym będzie nawiązywane połączenie. |
-| `AZURE_AD_RESOURCE` | Identyfikator zasobu usługi Active Directory do użycia podczas łączenia. Powinien być to identyfikator URI wskazujący na punkt końcowy zarządzania. |
+| `AZURE_AD_RESOURCE` | Identyfikator zasobu usługi Active Directory używany podczas nawiązywania połączenia jako identyfikator URI punktu końcowego zarządzania. |
 
 W przypadku korzystania z uwierzytelniania opartego na środowisku należy wywołać funkcję [NewAuthorizerFromEnvironment](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#NewAuthorizerFromEnvironment), aby pobrać obiekt autoryzatora. Ten obiekt jest następnie ustawiany na właściwość `Authorizer` klientów, aby umożliwić im dostęp do platformy Azure.
 
@@ -100,18 +111,18 @@ Na potrzeby uwierzytelniania w usłudze Azure Stack należy ustawić następują
 
 Te zmienne można pobrać z informacji o metadanych usługi Azure Stack. Aby pobrać metadane, otwórz przeglądarkę internetową w środowisku Azure Stack i skorzystaj z adresu URL: `(ResourceManagerURL)/metadata/endpoints?api-version=1.0`
 
-Adres `ResourceManagerURL` różni się w zależności od nazwy regionu, nazwy maszyny i zewnętrznej pełnej nazwy domeny (FQDN, fully qualified domain name) wdrożenia usługi Azure Stack:
+Adres `ResourceManagerURL` różni się w zależności od nazwy regionu, nazwy komputera i zewnętrznej, w pełni kwalifikowanej nazwy domeny (FQDN) wdrożenia usługi Azure Stack:
 
 | Środowisko | ResourceManagerURL |
 |----------------------|--------------|
 | Zestaw deweloperski | `https://management.local.azurestack.external/` |
 | Zintegrowane systemy | `https://management.(region).ext-(machine-name).(FQDN)` |
 
-Aby uzyskać więcej informacji na temat korzystania z zestawu Azure SDK dla języka Go w usłudze Azure Stack, zobacz [Korzystanie z profili wersji interfejsu API za pomocą języka Go w usłudze Azure Stack](https://docs.microsoft.com/azure/azure-stack/user/azure-stack-version-profiles-go)
+Aby uzyskać więcej informacji na temat korzystania z zestawu Azure SDK dla języka Go w usłudze Azure Stack, zobacz [Use API version profiles with Go in Azure Stack](https://docs.microsoft.com/azure/azure-stack/user/azure-stack-version-profiles-go) (Korzystanie z profilów wersji interfejsu API za pomocą języka Go w usłudze Azure Stack).
 
 ## <a name="use-file-based-authentication"></a>Używanie uwierzytelniania opartego na pliku
 
-Uwierzytelnianie oparte na pliku działa tylko z poświadczeniami klienta przechowywanymi w formacie pliku lokalnego generowanego przez [interfejs wiersza polecenia platformy Azure](/cli/azure). Można łatwo utworzyć ten plik, tworząc nową jednostkę usługi przy użyciu parametru `--sdk-auth`. Jeśli planujesz użycie uwierzytelniania opartego na pliku, upewnij się, że ten argument zostanie podany podczas tworzenia jednostki usługi. Ponieważ interfejs wiersza polecenia wyświetla dane wyjściowe w lokalizacji `stdout`, przekieruj dane wyjściowe do pliku.
+Uwierzytelnianie oparte na pliku korzysta z formatu pliku wygenerowanego przez [interfejs wiersza polecenia platformy Azure](/cli/azure). Można łatwo utworzyć ten plik, tworząc nową jednostkę usługi przy użyciu parametru `--sdk-auth`. Jeśli planujesz użycie uwierzytelniania opartego na pliku, upewnij się, że ten argument zostanie podany podczas tworzenia jednostki usługi. Ponieważ interfejs wiersza polecenia wyświetla dane wyjściowe w lokalizacji `stdout`, przekieruj dane wyjściowe do pliku.
 
 ```azurecli
 az ad sp create-for-rbac --sdk-auth > azure.auth
@@ -130,7 +141,7 @@ Aby uzyskać więcej informacji na temat używania jednostek usług i zarządzan
 
 ## <a name="use-device-token-authentication"></a>Używanie uwierzytelniania tokenu urządzenia
 
-Jeśli chcesz, aby użytkownicy logowali się interaktywnie, najlepszym sposobem zaoferowania tej możliwości jest uwierzytelnianie tokenu urządzenia. Ten przebieg uwierzytelniania przekazuje użytkownikowi token do wklejenia w witrynie logowania firmy Microsoft. Następnie użytkownik może się w niej uwierzytelnić za pomocą konta usługi Azure Active Directory (AAD). Ta metoda uwierzytelniania obsługuje konta z włączonym uwierzytelnianiem wieloskładnikowym,w przeciwieństwie do standardowego uwierzytelniania za pomocą nazwy użytkownika/hasła.
+Jeśli chcesz, aby użytkownicy logowali się interaktywnie, najlepszym sposobem jest uwierzytelnianie tokenu urządzenia. Ten przebieg uwierzytelniania przekazuje użytkownikowi token do wklejenia w witrynie logowania firmy Microsoft. Następnie użytkownik może się w niej uwierzytelnić za pomocą konta usługi Azure Active Directory (AAD). Ta metoda uwierzytelniania obsługuje konta z włączonym uwierzytelnianiem wieloskładnikowym,w przeciwieństwie do standardowego uwierzytelniania za pomocą nazwy użytkownika/hasła.
 
 Aby użyć uwierzytelniania tokenu urządzenia, należy utworzyć autoryzator [DeviceFlowConfig](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#DeviceFlowConfig) przy użyciu funkcji [NewDeviceFlowConfig](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#NewDeviceFlowConfig). Wywołaj element [Authorizer](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#DeviceFlowConfig.Authorizer) w obiekcie wynikowym, aby rozpocząć proces uwierzytelniania. Uwierzytelnianie przepływu urządzenia blokuje wykonywanie programu do momentu ukończenia całego przepływu uwierzytelniania.
 
@@ -142,7 +153,11 @@ authorizer, err := deviceConfig.Authorizer()
 
 ## <a name="use-an-authentication-client"></a>Używanie klienta uwierzytelniania
 
-Jeśli potrzebujesz określonego typu uwierzytelniania i chcesz, aby program wykonał zadania związane z ładowaniem informacji o uwierzytelnianiu od użytkownika, możesz użyć dowolnego klienta zgodnego z interfejsem [auth.AuthorizerConfig](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#AuthorizerConfig). Użyj typu, który implementuje ten interfejs, jeśli potrzebujesz programu interaktywnego, używasz specjalnych plików konfiguracji lub masz wymaganie, które uniemożliwia korzystanie z innej metody uwierzytelniania.
+Jeśli potrzebujesz określonego typu uwierzytelniania i chcesz, aby program wykonał zadania związane z ładowaniem informacji o uwierzytelnianiu od użytkownika, możesz użyć dowolnego klienta zgodnego z interfejsem [auth.AuthorizerConfig](https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#AuthorizerConfig). Użyj typu, który zaimplementuje ten interfejs, w następujących sytuacjach:
+
+* Napisanie programu interaktywnego
+* Użycie specjalnych plików konfiguracji
+* Istnienie wymagania, które nie pozwala na użycie wbudowanej metody uwierzytelniania
 
 > [!WARNING]
 > Nigdy nie umieszczaj poświadczeń platformy Azure w kodzie aplikacji. Wprowadzanie wpisów tajnych do pliku binarnego aplikacji ułatwia osobie atakującej ich wyodrębnienie, bez względu na to, czy aplikacja została uruchomiona. Powoduje to narażenie na ryzyko wszystkich zasobów platformy Azure z autoryzowanymi poświadczeniami!
@@ -162,7 +177,7 @@ W poniższej tabeli przedstawiono listę typów w zestawie SDK, które są zgodn
 [DeviceFlowConfig]: https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#DeviceFlowConfig
 [UsernamePasswordConfig]: https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#UsernamePasswordConfig
 
-Utwórz wystawcę uwierzytelniania przy użyciu skojarzonej funkcji `New`, a następnie wywołaj instrukcję `Authorize` w obiekcie wynikowym w celu przeprowadzenia uwierzytelniania. Aby na przykład używać uwierzytelniania opartego na certyfikacie:
+Utwórz wystawcę uwierzytelniania przy użyciu skojarzonej funkcji `New`, a następnie wywołaj instrukcję `Authorize` w obiekcie wynikowym w celu uwierzytelnienia. Aby na przykład używać uwierzytelniania opartego na certyfikacie:
 
 ```go
 import "github.com/Azure/go-autorest/autorest/azure/auth"
