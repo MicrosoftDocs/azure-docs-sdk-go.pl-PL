@@ -11,12 +11,12 @@ ms.technology: azure-sdk-go
 ms.devlang: go
 ms.service: active-directory
 ms.component: authentication
-ms.openlocfilehash: 28fd4a4c0832ab19dcf52dc549d0ddc0d1eec6f1
-ms.sourcegitcommit: 8b9e10b960150dc08f046ab840d6a5627410db29
+ms.openlocfilehash: 8f94b9ba715c32263d324306cce69bd484c05702
+ms.sourcegitcommit: c435f6602524565d340aac5506be5e955e78f16c
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 09/07/2018
-ms.locfileid: "44059105"
+ms.lasthandoff: 09/12/2018
+ms.locfileid: "44711978"
 ---
 # <a name="authentication-methods-in-the-azure-sdk-for-go"></a>Metody uwierzytelniania w zestawie Azure SDK dla języka Go
 
@@ -30,7 +30,7 @@ Zestaw Azure SDK dla języka Go oferuje kilka różnych typów uwierzytelniania 
 |---------------------|---------------------|
 | Uwierzytelnianie oparte na certyfikatach | Masz certyfikat X509 skonfigurowany dla jednostki lub użytkownika usługi Azure Active Directory (AAD). Aby dowiedzieć się więcej, zobacz [Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory]. |
 | Poświadczenia klienta | Masz skonfigurowaną jednostkę usługi dla tej aplikacji lub klasy aplikacji, do której ona należy. Aby dowiedzieć się więcej, zobacz [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure]. |
-| Tożsamość usługi zarządzanej (MSI, Managed Service Identity) | Aplikacja działa w obrębie zasobu platformy Azure, który został skonfigurowany przy użyciu tożsamości usługi zarządzanej (MSI). Aby dowiedzieć się więcej, zobacz [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]. |
+| Tożsamości zarządzane dla zasobów platformy Azure | Aplikacja działa na zasobie platformy Azure, który został skonfigurowany przy użyciu tożsamości zarządzanej. Aby dowiedzieć się więcej, zobacz [Tożsamości zarządzane dla zasobów platformy Azure]. |
 | Token urządzenia | Twoja aplikacja jest przeznaczona do korzystania z niej __tylko__ w sposób interaktywny. Użytkownicy mogą mieć włączone uwierzytelnianie wieloskładnikowe. Użytkownicy mogą logować się za pomocą przeglądarki internetowej. Aby uzyskać więcej informacji, zobacz [Używanie tokenu urządzenia](#use-device-token-authentication).|
 | Nazwa użytkownika/hasło | Posiadasz interaktywną aplikację, dla której nie może być używana inna metoda uwierzytelniania. Użytkownicy nie mają włączonego uwierzytelniania wieloskładnikowego na potrzeby logowania do usługi AAD. |
 
@@ -42,7 +42,7 @@ Zestaw Azure SDK dla języka Go oferuje kilka różnych typów uwierzytelniania 
 
 [Wprowadzenie do uwierzytelniania opartego na certyfikacie w usłudze Azure Active Directory]: /azure/active-directory/active-directory-certificate-based-authentication-get-started
 [Tworzenie jednostki usługi przy użyciu interfejsu wiersza polecenia platformy Azure]: /cli/azure/create-an-azure-service-principal-azure-cli
-[Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]: /azure/active-directory/managed-service-identity/overview
+[Tożsamości zarządzane dla zasobów platformy Azure]: /azure/active-directory/managed-identities-azure-resources/overview
 
 Te typy uwierzytelniania są dostępne za pośrednictwem różnych metod.
 
@@ -65,7 +65,7 @@ Uwierzytelnianie oparte na środowisku oferuje obsługę wszystkich metod uwierz
 * Poświadczenia klienta
 * Certyfikaty X509
 * Nazwa użytkownika/hasło
-* Tożsamość usługi zarządzanej (MSI, Managed Service Identity)
+* Tożsamości zarządzane dla zasobów platformy Azure
 
 Jeśli typ uwierzytelniania ma nieustawione wartości lub następuje odmowa, zestaw SDK automatycznie próbuje użyć kolejnego typu uwierzytelniania. Gdy nie ma już typów do wypróbowania, zestaw SDK zwraca błąd.
 
@@ -84,7 +84,7 @@ W poniższej tabeli przedstawiono zmienne środowiskowe, które należy ustawić
 | | `AZURE_CLIENT_ID` | Identyfikator klienta aplikacji. |
 | | `AZURE_USERNAME` | Nazwa użytkownika na potrzeby logowania się. |
 | | `AZURE_PASSWORD` | Hasło na potrzeby logowania się. |
-| __MSI__ | | W przypadku uwierzytelniania MSI nie są wymagane żadne poświadczenia. Aplikacja musi działać w obrębie zasobu platformy Azure skonfigurowanego do użycia usługi MSI. Aby uzyskać szczegółowe informacje, zobacz [Tożsamość usługi zarządzanej (MSI) dla zasobów platformy Azure]. |
+| __Tożsamość zarządzana__ | | Do uwierzytelniania z użyciem tożsamości zarządzanych nie są wymagane żadne poświadczenia. Aplikacja musi działać na zasobie platformy Azure skonfigurowanym do używania tożsamości zarządzanych. Aby uzyskać szczegółowe informacje, zobacz [Tożsamości zarządzane dla zasobów platformy Azure]. |
 
 Aby nawiązać połączenie z punktem końcowym chmury lub zarządzania innym niż domyślna publiczna chmura platformy Azure, ustaw poniższe zmienne środowiskowe. Najbardziej typowe przyczyny ich ustawiania to korzystanie z usługi Azure Stack, z chmury w innym regionie geograficznym lub z klasycznego modelu wdrożenia platformy Azure.
 
@@ -168,7 +168,7 @@ W poniższej tabeli przedstawiono listę typów w zestawie SDK, które są zgodn
 |---------------------|-----------------------|
 | Uwierzytelnianie oparte na certyfikacie | [ClientCertificateConfig] |
 | Poświadczenia klienta | [ClientCredentialsConfig] |
-| Tożsamość usługi zarządzanej (MSI, Managed Service Identity) | [MSIConfig] |
+| Tożsamości zarządzane dla zasobów platformy Azure | [MSIConfig] |
 | Nazwa użytkownika/hasło | [UsernamePasswordConfig] |
 
 [ClientCertificateConfig]: https://godoc.org/github.com/Azure/go-autorest/autorest/azure/auth#ClientCertificateConfig
