@@ -10,12 +10,12 @@ ms.topic: conceptual
 ms.technology: azure-sdk-go
 ms.devlang: go
 ms.component: authentication
-ms.openlocfilehash: f5c2c56e43828f0bedad0b5781dc71991ce1fd3e
-ms.sourcegitcommit: 172f81dd6e4c6a275dc8031815aa87cdb488cbf0
+ms.openlocfilehash: c2c3dccfa8da5cfe57fee0b90139002068982560
+ms.sourcegitcommit: 887b15afcdeaf926a5f3d21b64e4045167fd062c
 ms.translationtype: HT
 ms.contentlocale: pl-PL
-ms.lasthandoff: 09/26/2018
-ms.locfileid: "47231679"
+ms.lasthandoff: 10/21/2018
+ms.locfileid: "49481986"
 ---
 # <a name="authentication-methods-in-the-azure-sdk-for-go"></a>Metody uwierzytelniania w zestawie Azure SDK dla języka Go
 
@@ -70,20 +70,21 @@ Jeśli typ uwierzytelniania ma nieustawione wartości lub następuje odmowa, zes
 
 W poniższej tabeli przedstawiono zmienne środowiskowe, które należy ustawić dla każdego typu uwierzytelniania obsługiwanego podczas uwierzytelniania opartego na środowisku.
 
-| Typ uwierzytelniania | Zmienna środowiskowa | Opis |
-| ------------------- | -------------------- | ----------- |
-| __Poświadczenia klienta__ | `AZURE_TENANT_ID` | Identyfikator dzierżawy usługi Active Directory, do której należy jednostka usługi. |
-| | `AZURE_CLIENT_ID` | Nazwa lub identyfikator jednostki usługi. |
-| | `AZURE_CLIENT_SECRET` | Wpis tajny skojarzony z jednostką usługi. |
-| __Certyfikat__ | `AZURE_TENANT_ID` | Identyfikator dzierżawy usługi Active Directory, przy użyciu której zarejestrowano certyfikat. |
-| | `AZURE_CLIENT_ID` | Identyfikator klienta aplikacji skojarzony z certyfikatem. |
-| | `AZURE_CERTIFICATE_PATH` | Ścieżka do pliku certyfikatu klienta. |
-| | `AZURE_CERTIFICATE_PASSWORD` | Hasło certyfikatu klienta. |
-| __Nazwa użytkownika/hasło__ | `AZURE_TENANT_ID` | Identyfikator dzierżawy usługi Active Directory, do której należy użytkownik. |
-| | `AZURE_CLIENT_ID` | Identyfikator klienta aplikacji. |
-| | `AZURE_USERNAME` | Nazwa użytkownika na potrzeby logowania się. |
-| | `AZURE_PASSWORD` | Hasło na potrzeby logowania się. |
-| __Tożsamość zarządzana__ | | Do uwierzytelniania z użyciem tożsamości zarządzanych nie są wymagane żadne poświadczenia. Aplikacja musi działać na zasobie platformy Azure skonfigurowanym do używania tożsamości zarządzanych. Aby uzyskać szczegółowe informacje, zobacz [Tożsamości zarządzane dla zasobów platformy Azure]. |
+
+|  Typ uwierzytelniania   |     Zmienna środowiskowa     |                                                                                                     Opis                                                                                                      |
+|------------------------|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Poświadczenia klienta** |      `AZURE_TENANT_ID`       |                                                                    Identyfikator dzierżawy usługi Active Directory, do której należy jednostka usługi.                                                                     |
+|                        |      `AZURE_CLIENT_ID`       |                                                                                       Nazwa lub identyfikator jednostki usługi.                                                                                       |
+|                        |    `AZURE_CLIENT_SECRET`     |                                                                                  Wpis tajny skojarzony z jednostką usługi.                                                                                   |
+|    **Certyfikat**     |      `AZURE_TENANT_ID`       |                                                                   Identyfikator dzierżawy usługi Active Directory, przy użyciu której zarejestrowano certyfikat.                                                                    |
+|                        |      `AZURE_CLIENT_ID`       |                                                                              Identyfikator klienta aplikacji skojarzony z certyfikatem.                                                                              |
+|                        |   `AZURE_CERTIFICATE_PATH`   |                                                                                       Ścieżka do pliku certyfikatu klienta.                                                                                       |
+|                        | `AZURE_CERTIFICATE_PASSWORD` |                                                                                       Hasło certyfikatu klienta.                                                                                       |
+| **Nazwa użytkownika/hasło**  |      `AZURE_TENANT_ID`       |                                                                           Identyfikator dzierżawy usługi Active Directory, do której należy użytkownik.                                                                           |
+|                        |      `AZURE_CLIENT_ID`       |                                                                                              Identyfikator klienta aplikacji.                                                                                              |
+|                        |       `AZURE_USERNAME`       |                                                                                            Nazwa użytkownika na potrzeby logowania się.                                                                                             |
+|                        |       `AZURE_PASSWORD`       |                                                                                            Hasło na potrzeby logowania się.                                                                                             |
+|  **Tożsamość zarządzana**  |                              | Do uwierzytelniania z użyciem tożsamości zarządzanych nie są wymagane żadne poświadczenia. Aplikacja musi działać na zasobie platformy Azure skonfigurowanym do używania tożsamości zarządzanych. Aby uzyskać szczegółowe informacje, zobacz [Tożsamości zarządzane dla zasobów platformy Azure]. |
 
 Aby nawiązać połączenie z punktem końcowym chmury lub zarządzania innym niż domyślna publiczna chmura platformy Azure, ustaw poniższe zmienne środowiskowe. Najbardziej typowe przyczyny ich ustawiania to korzystanie z usługi Azure Stack, z chmury w innym regionie geograficznym lub z klasycznego modelu wdrożenia platformy Azure.
 
